@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-5">
+  <h3 class="mb-4 text-danger">❌ Failed Transactions</h3>
+<form method="get" class="d-flex mb-4" role="search">
+  <input class="form-control me-2" type="search" name="q" placeholder="Search by name, phone, or ID..." value="{{ query|default:'' }}">
+  <button class="btn btn-outline-primary" type="submit">Search</button>
+</form>
+
+  <table class="table table-bordered table-hover bg-white">
+    <thead class="table-dark">
+      <tr>
+        <th>#</th>
+        <th>Transaction ID</th>
+        <th>Customer Name</th>
+        <th>Phone Number</th>
+        <th>Package</th>
+        <th>Amount (Ksh)</th>
+        <th>Date</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for tx in transactions %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ tx.transaction_id }}</td>
+        <td>{{ tx.customer_name }}</td>
+        <td>{{ tx.phone_number }}</td>
+        <td>{{ tx.package_type }}</td>
+        <td>{{ tx.amount }}</td>
+        <td>{{ tx.created_at|date:"d M Y, H:i" }}</td>
+        <td>
+          <a href="{% url 'transaction_detail' tx.pk %}?from=failed"class="btn btn-sm btn-outline-info">View Details</a>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="7" class="text-center text-muted">No failed transactions found.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <!-- Pagination -->
+  <nav>
+    <ul class="pagination justify-content-center">
+      {% if transactions.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ transactions.previous_page_number }}">Previous</a></li>
+      {% endif %}
+
+      <li class="page-item active"><a class="page-link" href="#">{{ transactions.number }}</a></li>
+
+      {% if transactions.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ transactions.next_page_number }}">Next</a></li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>
+
+{% endblock %}

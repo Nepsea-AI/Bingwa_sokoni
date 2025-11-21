@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-4">
+  <!-- Header Section -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h3 class="fw-bold text-dark">📊 Statistics</h3>
+
+    <!-- Refresh Button -->
+    <button class="btn btn-light border rounded-circle shadow-sm" id="refreshBtn" title="Refresh">
+      <i class="bi bi-arrow-clockwise fs-5"></i>
+    </button>
+  </div>
+
+  <!-- Date Range Filters -->
+  <div class="d-flex justify-content-center gap-3 mb-5">
+    <div>
+      <label class="form-label fw-semibold">Start:</label>
+      <input type="date" id="startDate" class="form-control" value="">
+    </div>
+    <div>
+      <label class="form-label fw-semibold">End:</label>
+      <input type="date" id="endDate" class="form-control" value="">
+    </div>
+  </div>
+
+  <!-- Commission Earned Chart -->
+  <div class="card shadow-sm mb-4 border-0">
+    <div class="card-body">
+      <h5 class="fw-bold text-success text-center mb-3">Commission Earned Over Time</h5>
+      <p class="text-center text-muted mb-4">Estimated Commission: ~Ksh 
+        <span class="fw-bold text-success">{{ total_commission|default:"0.00" }}</span>
+      </p>
+      <canvas id="commissionChart" height="120"></canvas>
+    </div>
+  </div>
+
+  <!-- Airtime & Money Transactions -->
+  <div class="card shadow-sm mb-4 border-0">
+    <div class="card-body">
+      <h5 class="fw-bold text-primary text-center mb-3">Airtime & Money Transactions</h5>
+      <canvas id="airtimeMoneyChart" height="120"></canvas>
+      <div class="d-flex justify-content-center mt-3 fw-semibold">
+        <p class="text-info me-4 mb-0">Total Airtime: Ksh 0.00</p>
+        <p class="text-success mb-0">Total Money: Ksh 0.00</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Performance -->
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <h5 class="fw-bold text-center mb-4">📦 Product Performance</h5>
+      <div class="d-flex justify-content-around mb-4">
+        <div class="text-center">
+          <i class="bi bi-box fs-3 text-primary"></i>
+          <p class="fw-bold mb-0">Product</p>
+        </div>
+        <div class="text-center">
+          <i class="bi bi-123 fs-3 text-info"></i>
+          <p class="fw-bold mb-0">Sold</p>
+        </div>
+        <div class="text-center">
+          <i class="bi bi-cash-coin fs-3 text-warning"></i>
+          <p class="fw-bold mb-0">Revenue</p>
+        </div>
+      </div>
+      <canvas id="productPerformanceChart" height="120"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+// === Default Charts ===
+
+// Commission Chart
+const commissionCtx = document.getElementById('commissionChart').getContext('2d');
+let commissionChart = new Chart(commissionCtx, {
+  type: 'line',
+  data: {
+    labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    datasets: [{
+      label: 'Commission Earned',
+      data: [0, 0, 0, 0, 0, 0, 0],
+      borderColor: 'green',
+      backgroundColor: 'rgba(0,128,0,0.1)',
+      borderWidth: 2,
+      fill: true,
+      tension: 0.3
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: true, position: 'top' },
+    },
+    scales: {
+      y: { beginAtZero: true }
+    }
+  }
+});
+
+// Airtime & Money Transactions Chart
+const airtimeMoneyCtx = document.getElementById('airtimeMoneyChart').getContext('2d');
+let airtimeMoneyChart = new Chart(airtimeMoneyCtx, {
+  type: 'bar',
+  data: {
+    labels: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    datasets: [
+      {
+        label: 'Airtime Used',
+        data: [0, 0, 0, 0, 0, 0, 0],
+        backgroundColor: 'skyblue'
+      },
+      {
+        label: 'Money Received',
+        data: [0, 0, 0, 0, 0, 0, 0],
+        backgroundColor: 'lightgreen'
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: true, position: 'top' },
+    },
+    scales: {
+      y: { beginAtZero: true }
+    }
+  }
+});
+
+// Product Performance Chart
+const productCtx = document.getElementById('productPerformanceChart').getContext('2d');
+let productChart = new Chart(productCtx, {
+  type: 'bar',
+  data: {
+    labels: ['iPh', 'Samsung', 'Airtime', 'Bundles'],
+    datasets: [
+      {
+        label: 'Sold',
+        data: [0, 0, 0, 0],
+        backgroundColor: '#0dcaf0'
+      },
+      {
+        label: 'Revenue (Ksh)',
+        data: [0, 0, 0, 0],
+        backgroundColor: '#ffc107'
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: true, position: 'top' },
+    },
+    scales: {
+      y: { beginAtZero: true }
+    }
+  }
+});
+
+// === Refresh Button Logic ===
+document.getElementById('refreshBtn').addEventListener('click', () => {
+  const start = document.getElementById('startDate').value;
+  const end = document.getElementById('endDate').value;
+
+  if (!start || !end) {
+    alert("Please select both start and end dates.");
+    return;
+  }
+
+  // Simulate refreshing chart data (will be replaced by real Django data later)
+  commissionChart.data.datasets[0].data = Array(7).fill().map(() => Math.random() * 100);
+  airtimeMoneyChart.data.datasets[0].data = Array(7).fill().map(() => Math.random() * 50);
+  airtimeMoneyChart.data.datasets[1].data = Array(7).fill().map(() => Math.random() * 70);
+  productChart.data.datasets[0].data = Array(4).fill().map(() => Math.random() * 10);
+  productChart.data.datasets[1].data = Array(4).fill().map(() => Math.random() * 1000);
+
+  commissionChart.update();
+  airtimeMoneyChart.update();
+  productChart.update();
+
+  alert(`Showing data from ${start} to ${end}`);
+});
+</script>
+
+{% endblock %}

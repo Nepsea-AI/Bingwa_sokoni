@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container mt-4" style="max-width:600px;">
+  <h4 class="fw-bold text-secondary mb-3">Messages</h4>
+
+  <!-- Search -->
+    <form method="get" action="">
+        <div class="input-group mb-3">
+            <span class="input-group-text bg-light border-0"><i class="bi bi-search"></i></span>
+            <input type="text" name="q" value="{{ query }}" id="searchInput" 
+                class="form-control border-0 shadow-sm" placeholder="Search messages...">
+        </div>
+    </form>
+
+
+  <!-- Message Threads -->
+  <div id="messageList">
+    {% for msg in threads %}
+      <a href="{% url 'conversation' msg.sender %}" class="text-decoration-none text-dark">
+        <div class="card mb-2 border-0 shadow-sm message-item">
+          <div class="card-body d-flex justify-content-between align-items-center">
+            <div>
+              <h6 class="fw-bold mb-1 text-uppercase {% if not msg.is_read %}text-dark fw-bold{% else %}text-muted{% endif %}">
+                {{ msg.sender }}
+              </h6>
+              <p class="text-muted mb-0 small">{{ msg.body|truncatechars:60 }}</p>
+            </div>
+            <small class="text-muted">{{ msg.timestamp|date:"H:i, j M" }}</small>
+          </div>
+        </div>
+      </a>
+    {% empty %}
+      <div class="alert alert-info text-center">No messages found.</div>
+    {% endfor %}
+  </div>
+</div>
+</br></br></br></br></br></br></br></br></br></br>
+<script>
+  const searchInput = document.getElementById('searchInput');
+  const cards = document.querySelectorAll('.message-item');
+
+  searchInput.addEventListener('input', e => {
+    const term = e.target.value.toLowerCase();
+    cards.forEach(c => {
+      c.style.display = c.textContent.toLowerCase().includes(term) ? '' : 'none';
+    });
+  });
+</script>
+
+<style>
+  .message-item:hover {
+    background-color: #f8f9fa;
+    transform: scale(1.02);
+    transition: all 0.2s ease;
+  }
+</style>
+
+{% endblock %}

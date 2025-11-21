@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block content %}
+
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Register</h1>
+            <p class="lead fw-normal text-white-50 mb-0">Input your credentials...</p>
+        </div>
+    </div>
+</header>
+
+
+
+<div class="container">
+  <div class="row">
+
+    <div class="col-md-6 offset-md-3">
+    </br></br>
+
+<form method="post" action="{% url 'register' %}"> {% csrf_token %}
+{{ form.as_p }}
+<br/><br/>
+    
+      <label>
+        <input type="checkbox" value="Forgot password"> Forgot password
+      </label>
+  
+    <br/><br/>
+  
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+
+    <p class="mt-5 mb-3 text-muted">&copy; 2025-2027</p>
+</form>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+{% endblock %}

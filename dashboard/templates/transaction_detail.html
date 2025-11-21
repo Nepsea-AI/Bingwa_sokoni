@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container mt-5">
+  <div class="card shadow border-{{ tx.status }}">
+    <div class="card-header 
+      {% if tx.status == 'completed' %} bg-success 
+      {% elif tx.status == 'pending' %} bg-warning 
+      {% elif tx.status == 'failed' %} bg-danger 
+      {% endif %} text-white">
+      
+      <h4 class="mb-0">
+        {% if tx.status == 'completed' %} ✅ COMPLETED TRANSACTION
+        {% elif tx.status == 'pending' %} ⏳ PENDING TRANSACTION
+        {% elif tx.status == 'failed' %} ❌ FAILED TRANSACTION
+        {% endif %}
+      </h4>
+    </div>
+
+    <div class="card-body">
+      <div class="mb-3"><strong>Transaction ID:</strong> {{ tx.transaction_id }}</div>
+      <div class="mb-3"><strong>Phone Number:</strong> {{ tx.phone_number }}</div>
+      <div class="mb-3"><strong>Amount:</strong> Ksh {{ tx.amount }}</div>
+      <div class="mb-3"><strong>Package:</strong> {{ tx.package_type }}</div>
+      <div class="mb-3"><strong>Date:</strong> {{ tx.created_at|date:"d M Y, H:i" }}</div>
+      <div class="mb-3">
+        <strong>Status:</strong> 
+        <span class="badge 
+          {% if tx.status == 'completed' %} bg-success 
+          {% elif tx.status == 'pending' %} bg-warning 
+          {% elif tx.status == 'failed' %} bg-danger 
+          {% endif %}">
+          {{ tx.status|upper }}
+        </span>
+      </div>
+      <div class="mb-3"><strong>Sender:</strong> {{ tx.sender }}</div>
+      <div class="mb-3"><strong>USSD Code:</strong> <code>{{ tx.ussd_string }}</code></div>
+      <div class="mb-3"><strong>SIM Used:</strong> {{ tx.sim_slot }}</div>
+      <div class="mb-3"><strong>Message:</strong> <span class="text-muted">{{ tx.message }}</span></div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="card-footer text-end">
+      {% if tx.status == 'failed' %}
+        <button class="btn btn-success btn-sm me-2"><i class="bi bi-arrow-clockwise"></i> Retry</button>
+        <button class="btn btn-primary btn-sm me-2"><i class="bi bi-check-circle"></i> Mark Resolved</button>
+        <button class="btn btn-danger btn-sm me-2"><i class="bi bi-x-circle"></i> Cancel</button>
+        <button class="btn btn-warning btn-sm"><i class="bi bi-envelope"></i> Message</button>
+      {% elif tx.status == 'pending' %}
+        <button class="btn btn-outline-secondary btn-sm me-2"><i class="bi bi-hourglass-split"></i> Refresh Status</button>
+        <button class="btn btn-primary btn-sm"><i class="bi bi-check-circle"></i> Mark as Completed</button>
+      {% else %}
+        <span class="text-success fw-bold">No further action required.</span>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- Dynamic Back Link Based on Origin -->
+<div class="text-end mt-3">
+  {% if origin == 'completed' %}
+    <a href="{% url 'completed_transactions' %}" class="btn btn-outline-success btn-sm">← Back to Completed</a>
+  {% elif origin == 'pending' %}
+    <a href="{% url 'pending_transactions' %}" class="btn btn-outline-warning btn-sm">← Back to Pending</a>
+  {% elif origin == 'failed' %}
+    <a href="{% url 'failed_transactions' %}" class="btn btn-outline-danger btn-sm">← Back to Failed</a>
+  {% elif origin == 'received' %}
+    <a href="{% url 'received_transactions' %}" class="btn btn-outline-primary btn-sm">← Back to Received</a>
+  {% endif %}
+</div>
+
+
+{% endblock %}

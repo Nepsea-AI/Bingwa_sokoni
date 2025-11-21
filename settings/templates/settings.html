@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-5">
+  <h2 class="text-primary mb-4"><i class="bi bi-sliders2-vertical me-2"></i>Agent Settings</h2>
+
+  <!-- USER ID Card -->
+        <div class="alert alert-primary d-flex align-items-center shadow-sm mb-4" id="userIdCard" style="cursor:pointer;">
+      <i class="bi bi-person-circle fs-4 me-2"></i>
+      <a href="{% url 'user_id_page' %}" class="text-decoration-none text-dark">
+        <div>
+          <strong>User ID:</strong>
+          <span id="userIdDisplay">{{ request.user.userprofile.sim_number|default:"****" }}</span>
+        </div>
+      </a>
+    </div>
+
+
+  <!-- Core App Sections -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-dark text-white">
+      <i class="bi bi-shop-window me-2"></i> Core App Features
+    </div>
+    <div class="card-body">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><i class="bi bi-bag-check me-2 text-success"></i> <a href="#">Bingwa Store</a></li>
+        <li class="list-group-item"><i class="bi bi-diagram-3 me-2 text-info"></i> <a href="#">Data Plans Manager</a></li>
+        <li class="list-group-item"><i class="bi bi-clock-history me-2 text-warning"></i> <a href="#">USSD Scheduler</a></li>
+        <li class="list-group-item"><i class="bi bi-person-lines-fill me-2 text-primary"></i> <a href="#">Client Management</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Communication Tools -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-secondary text-white">
+      <i class="bi bi-chat-left-dots-fill me-2"></i> Communication Tools
+    </div>
+    <div class="card-body">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><i class="bi bi-journal-bookmark me-2 text-primary"></i> <a href="#">Contacts</a></li>
+        <li class="list-group-item"><i class="bi bi-envelope-open me-2 text-success"></i> <a href="{% url 'inbox' %}">Messages</a></li>
+        <li class="list-group-item"><i class="bi bi-inbox-fill me-2 text-info"></i> <a href="{% url 'inbox_transactions' %}">Inbox Transactions</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Automation Tools -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-info text-white">
+      <i class="bi bi-arrow-repeat me-2"></i> Automation & Smart Maintenance
+    </div>
+    <div class="card-body">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><i class="bi bi-trash-fill me-2 text-danger"></i> <a href="#">Auto Delete Transactions</a></li>
+        <li class="list-group-item"><i class="bi bi-arrow-clockwise me-2 text-primary"></i> <a href="#">Retry Transactions</a></li>
+        <li class="list-group-item"><i class="bi bi-stars me-2 text-warning"></i> <a href="#">Auto Recommend Data Plans</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- USSD & Security -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-warning text-dark">
+      <i class="bi bi-shield-lock-fill me-2"></i> USSD & Security Controls
+    </div>
+    <div class="card-body">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><i class="bi bi-terminal me-2 text-dark"></i> <a href="#">USSD Access</a></li>
+        <li class="list-group-item"><i class="bi bi-x-octagon me-2 text-danger"></i> <a href="#">Blacklist</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- System Behaviors -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header bg-success text-white">
+      <i class="bi bi-cpu me-2"></i> Smart Features & Assistant Tools
+    </div>
+    <div class="card-body">
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><i class="bi bi-bell-fill me-2 text-warning"></i> <a href="#">Notifications</a></li>
+        <li class="list-group-item"><i class="bi bi-robot me-2 text-info"></i> <a href="#">Engage Bot</a></li>
+        <li class="list-group-item"><i class="bi bi-hourglass-split me-2 text-secondary"></i> <a href="#">Timeout Assistant</a></li>
+        <li class="list-group-item"><i class="bi bi-lightbulb me-2 text-primary"></i> <a href="#">Smart Assistant</a></li>
+        <li class="list-group-item"><i class="bi bi-send-check-fill me-2 text-danger"></i> <a href="#">SMS Relay Manager</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Save Button -->
+  <div class="text-end">
+    <button class="btn btn-lg btn-outline-success px-5 mt-3">
+      <i class="bi bi-check2-circle me-2"></i> Save Settings
+    </button>
+  </div>
+</div>
+{% endblock %}

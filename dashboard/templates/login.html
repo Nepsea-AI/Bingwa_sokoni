@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+<header class="bg-dark py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="text-center text-white">
+            <h1 class="display-4 fw-bolder">Login</h1>
+            <p class="tagline mb-0">
+                <span class="highlight">Input your credentials so as to be a user...</span> 
+            </p>
+        </div>
+    </div>
+</header>
+
+<div class="container mt-5" style="max-width: 400px;">
+  <h4 class="mb-4 text-center fw-bold mt-2">Custom Login</h4>
+
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="d-flex flex-column pb-3">
+      <label for="username" class="form-label">Username</label>
+      <input type="text" name="username" class="form-control" required>
+    </div>
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" name="password" class="form-control" required>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
+
+    <p class="mt-5 mb-3 text-muted">&copy; 2025-2027</p>
+  </form>
+</div>
+
+{% endblock %}

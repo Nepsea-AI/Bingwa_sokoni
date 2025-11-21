@@ -1,0 +1,9 @@
+.env
+db.sqlite3
+myenv/
+env/
+venv/
+__pycache__/
+*.pyc
+/static_cdn/
+/media_cdn/

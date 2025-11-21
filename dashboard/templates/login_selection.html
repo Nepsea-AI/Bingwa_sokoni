@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container text-center mt-5">
+  <h2 class="mb-4">Login to Bingwa Sokoni</h2>
+
+  <div class="d-grid gap-3 col-6 mx-auto">
+    <!-- Google OAuth2 Login -->
+    <a href="{% url 'google_login' %}" class="btn btn-danger">
+      <i class="bi bi-google"></i> Login with Google
+    </a>
+
+    <!-- Manual Login -->
+    <a href="{% url 'custom_login' %}" class="btn btn-outline-primary">
+      <i class="bi bi-person"></i> Login via App
+    </a>
+  </div>
+</div>
+
+{% endblock %}
