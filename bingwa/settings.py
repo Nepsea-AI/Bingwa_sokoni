@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -17,7 +18,18 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = []
+
+
+# Flexible DEBUG and ALLOWED_HOSTS for local and production
+if os.environ.get('DJANGO_ENV', '').lower() == 'local':
+    DEBUG = True
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1']
+else:
+    DEBUG = os.environ.get('DEBUG', 'False').lower() in ['true', '1', 'yes']
+    ALLOWED_HOSTS = [host.strip() for host in os.environ.get('ALLOWED_HOSTS', '').split(',') if host.strip()]
+
+
+CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',') if origin.strip()]
 
 # Application definition
 INSTALLED_APPS = [
@@ -30,6 +42,7 @@ INSTALLED_APPS = [
     'dashboard',
     'settings',
     'social_django',
+    'whitenoise.runserver_nostatic',
 ]
 
 MIDDLEWARE = [
@@ -40,6 +53,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    
+
+     #my middleware
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
@@ -78,6 +96,16 @@ DATABASES = {
     }
 }
 
+
+# If DATABASE_URL exists (Railway will provide it), override with Postgres
+DATABASE_URL = os.environ.get("DATABASE_URL")
+if DATABASE_URL:
+    DATABASES['default'] = dj_database_url.config(
+        default=DATABASE_URL,
+        conn_max_age=600,
+        ssl_require=True
+    )
+
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
@@ -112,6 +140,9 @@ AUTHENTICATION_BACKENDS = (
     'social_core.backends.google.GoogleOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
+
+# WhiteNoise config
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Redirects for login/logout
 LOGIN_URL = 'login'
