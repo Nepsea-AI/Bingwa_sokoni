@@ -1,0 +1,12 @@
+[
+  {
+    "model": "dashboard.loginoption",
+    "pk": 1,
+    "fields": {"name": "Login with Google"}
+  },
+  {
+    "model": "dashboard.loginoption",
+    "pk": 2,
+    "fields": {"name": "Login via App"}
+  }
+]
