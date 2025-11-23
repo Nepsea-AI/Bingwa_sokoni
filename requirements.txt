@@ -12,10 +12,8 @@ idna==3.10
 packaging==25.0
 pillow==11.1.0
 platformdirs==4.3.6
-pypiwin32==223
 python-decouple==3.8
 python-dotenv==1.1.1
-pywin32==308
 requests==2.32.3
 setuptools==75.8.0
 sqlparse==0.5.1
